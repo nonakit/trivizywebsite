@@ -994,10 +994,6 @@ body {
   top: 6rem;
 }
 
-.faq-items-col {
-  /* FAQ items container */
-}
-
 .faq-item {
   border-bottom: 1px solid var(--border-color);
 }
@@ -1106,7 +1102,9 @@ body {
 }
 
 .footer-brand {
-  /* Brand column */
+  grid-column: 1 / 2;
+  display: flex;
+  flex-direction: column;
 }
 
 .footer-logo {
