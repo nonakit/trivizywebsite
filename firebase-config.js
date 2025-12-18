@@ -3,7 +3,7 @@
 
 // This file will be loaded as a module
 const firebaseConfig = {
-  apiKey: "AIzaSyCz4Nmsxk4t__Nao2yMxapYNMAeFGdmfAI",
+  apiKey: "AIzaSyCz4Nmsxk4t__Nao2yMxapYNMAeFGdmfAI",  // This is a CLIENT key
   authDomain: "draftacv-blog-ba799.firebaseapp.com",
   projectId: "draftacv-blog-ba799",
   storageBucket: "draftacv-blog-ba799.firebasestorage.app",
@@ -13,4 +13,5 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase (will be done in each file)
+
 window.firebaseConfig = firebaseConfig;
