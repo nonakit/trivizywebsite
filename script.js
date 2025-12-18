@@ -1,5 +1,12 @@
 // Wait for DOM to be ready
 document.addEventListener("DOMContentLoaded", () => {
+  
+  // ===== PACKAGE REDIRECTION FUNCTION (called from index.html buttons) =====
+  window.selectPackageAndRedirect = function(packageKey) {
+    // Redirect to form.html and pass the package key as a URL parameter
+    window.location.href = `form.html?package=${packageKey}`;
+  }
+
   // ===== NAVBAR SCROLL EFFECT =====
   const navbar = document.getElementById("navbar")
   let lastScroll = 0
@@ -79,6 +86,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const btn = this.querySelector(".plan-btn")
       btn.classList.add("selected")
       btn.textContent = this.dataset.plan === "custom" ? "Get in Touch" : "Selected"
+      
+      // NEW: Update CTA button's onclick to use the currently selected package
+      ctaBtn.setAttribute('onclick', `selectPackageAndRedirect('${this.dataset.plan}')`);
 
       // Update CTA button text
       const planName = planNames[this.dataset.plan]
@@ -348,3 +358,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("Trivizy website initialized successfully!")
 })
+// End of script.js

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog CMS - DraftaCV Admin</title>
+  <link rel="icon" type="image/png" href="../images/Asset 6 (2).png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="cms.css">
+</head>
+<body>
+  <div class="cms-container">
+    <!-- Sidebar -->
+    <aside class="cms-sidebar">
+      <div class="sidebar-header">
+        <a href="../index.html" class="sidebar-logo">
+          <i class="fas fa-arrow-left"></i>
+          <span>DraftaCV</span>
+        </a>
+        <span class="sidebar-label">Blog CMS</span>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-view="dashboard" onclick="switchView('dashboard')">
+          <i class="fas fa-chart-line"></i>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" data-view="posts" onclick="switchView('posts')">
+          <i class="fas fa-file-alt"></i>
+          <span>All Posts</span>
+        </button>
+        <button class="nav-item" data-view="editor" onclick="switchView('editor'); resetEditor();">
+          <i class="fas fa-plus-circle"></i>
+          <span>New Post</span>
+        </button>
+        <button class="nav-item" data-view="categories" onclick="switchView('categories')">
+          <i class="fas fa-folder"></i>
+          <span>Categories</span>
+        </button>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <a href="../blog.html" target="_blank" class="view-blog-btn">
+          <i class="fas fa-external-link-alt"></i>
+          <span>View Blog</span>
+        </a>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="cms-main">
+      <!-- Dashboard View -->
+      <section id="dashboard-view" class="cms-view active">
+        <div class="view-header">
+          <h1>Dashboard</h1>
+          <p>Welcome to your Blog CMS</p>
+        </div>
+        
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="total-posts">0</span>
+              <span class="stat-label">Total Posts</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon published">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="published-posts">0</span>
+              <span class="stat-label">Published</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon draft">
+              <i class="fas fa-edit"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="draft-posts">0</span>
+              <span class="stat-label">Drafts</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon featured">
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="featured-posts">0</span>
+              <span class="stat-label">Featured</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="dashboard-section">
+          <div class="section-header">
+            <h2>Recent Posts</h2>
+            <button class="btn btn-primary" onclick="switchView('editor'); resetEditor();">
+              <i class="fas fa-plus"></i>
+              New Post
+            </button>
+          </div>
+          <div class="recent-posts" id="recent-posts">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+      
+      <!-- Posts List View -->
+      <section id="posts-view" class="cms-view">
+        <div class="view-header">
+          <h1>All Posts</h1>
+          <div class="header-actions">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="posts-search" placeholder="Search posts..." oninput="filterPosts()">
+            </div>
+            <select id="posts-filter" onchange="filterPosts()">
+              <option value="all">All Status</option>
+              <option value="published">Published</option>
+              <option value="draft">Drafts</option>
+            </select>
+            <button class="btn btn-primary" onclick="switchView('editor'); resetEditor();">
+              <i class="fas fa-plus"></i>
+              New Post
+            </button>
+          </div>
+        </div>
+        
+        <div class="posts-table-container">
+          <table class="posts-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="posts-table-body">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+          <div class="empty-state" id="posts-empty" style="display: none;">
+            <i class="fas fa-file-alt"></i>
+            <h3>No posts yet</h3>
+            <p>Create your first blog post to get started</p>
+            <button class="btn btn-primary" onclick="switchView('editor'); resetEditor();">
+              Create Post
+            </button>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Editor View -->
+      <section id="editor-view" class="cms-view">
+        <div class="editor-container">
+          <!-- Editor Header -->
+          <div class="editor-header">
+            <div class="editor-title-section">
+              <button class="back-btn" onclick="switchView('posts')">
+                <i class="fas fa-arrow-left"></i>
+              </button>
+              <span id="editor-mode-label">New Post</span>
+            </div>
+            <div class="editor-actions">
+              <button class="btn btn-secondary" onclick="saveDraft()">
+                <i class="fas fa-save"></i>
+                Save Draft
+              </button>
+              <button class="btn btn-primary" onclick="publishPost()">
+                <i class="fas fa-paper-plane"></i>
+                Publish
+              </button>
+            </div>
+          </div>
+          
+          <!-- Editor Main Area -->
+          <div class="editor-body">
+            <div class="editor-main">
+              <!-- Title Input -->
+              <input type="text" id="post-title" class="title-input" placeholder="Enter post title...">
+              
+              <!-- Excerpt Input -->
+              <textarea id="post-excerpt" class="excerpt-input" placeholder="Write a short excerpt/summary (displayed in blog cards)..." rows="3"></textarea>
+              
+              <!-- Rich Text Editor Toolbar -->
+              <div class="editor-toolbar">
+                <div class="toolbar-group">
+                  <button type="button" onclick="execCommand('bold')" title="Bold">
+                    <i class="fas fa-bold"></i>
+                  </button>
+                  <button type="button" onclick="execCommand('italic')" title="Italic">
+                    <i class="fas fa-italic"></i>
+                  </button>
+                  <button type="button" onclick="execCommand('underline')" title="Underline">
+                    <i class="fas fa-underline"></i>
+                  </button>
+                  <button type="button" onclick="execCommand('strikeThrough')" title="Strikethrough">
+                    <i class="fas fa-strikethrough"></i>
+                  </button>
+                </div>
+                <div class="toolbar-divider"></div>
+                <div class="toolbar-group">
+                  <button type="button" onclick="execCommand('formatBlock', 'h2')" title="Heading 2">
+                    <span class="text-btn">H2</span>
+                  </button>
+                  <button type="button" onclick="execCommand('formatBlock', 'h3')" title="Heading 3">
+                    <span class="text-btn">H3</span>
+                  </button>
+                  <button type="button" onclick="execCommand('formatBlock', 'h4')" title="Heading 4">
+                    <span class="text-btn">H4</span>
+                  </button>
+                  <button type="button" onclick="execCommand('formatBlock', 'p')" title="Paragraph">
+                    <i class="fas fa-paragraph"></i>
+                  </button>
+                </div>
+                <div class="toolbar-divider"></div>
+                <div class="toolbar-group">
+                  <button type="button" onclick="execCommand('insertUnorderedList')" title="Bullet List">
+                    <i class="fas fa-list-ul"></i>
+                  </button>
+                  <button type="button" onclick="execCommand('insertOrderedList')" title="Numbered List">
+                    <i class="fas fa-list-ol"></i>
+                  </button>
+                  <button type="button" onclick="execCommand('indent')" title="Indent">
+                    <i class="fas fa-indent"></i>
+                  </button>
+                  <button type="button" onclick="execCommand('outdent')" title="Outdent">
+                    <i class="fas fa-outdent"></i>
+                  </button>
+                </div>
+                <div class="toolbar-divider"></div>
+                <div class="toolbar-group">
+                  <button type="button" onclick="insertLink()" title="Insert Link">
+                    <i class="fas fa-link"></i>
+                  </button>
+                  <button type="button" onclick="insertImage()" title="Insert Image">
+                    <i class="fas fa-image"></i>
+                  </button>
+                  <button type="button" onclick="execCommand('formatBlock', 'blockquote')" title="Quote">
+                    <i class="fas fa-quote-left"></i>
+                  </button>
+                  <button type="button" onclick="insertCodeBlock()" title="Code Block">
+                    <i class="fas fa-code"></i>
+                  </button>
+                </div>
+                <div class="toolbar-divider"></div>
+                <div class="toolbar-group">
+                  <button type="button" onclick="execCommand('justifyLeft')" title="Align Left">
+                    <i class="fas fa-align-left"></i>
+                  </button>
+                  <button type="button" onclick="execCommand('justifyCenter')" title="Align Center">
+                    <i class="fas fa-align-center"></i>
+                  </button>
+                  <button type="button" onclick="execCommand('justifyRight')" title="Align Right">
+                    <i class="fas fa-align-right"></i>
+                  </button>
+                </div>
+                <div class="toolbar-divider"></div>
+                <div class="toolbar-group">
+                  <button type="button" onclick="execCommand('removeFormat')" title="Clear Formatting">
+                    <i class="fas fa-eraser"></i>
+                  </button>
+                  <button type="button" onclick="execCommand('undo')" title="Undo">
+                    <i class="fas fa-undo"></i>
+                  </button>
+                  <button type="button" onclick="execCommand('redo')" title="Redo">
+                    <i class="fas fa-redo"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Rich Text Editor Content Area -->
+              <div id="post-content" class="editor-content" contenteditable="true" placeholder="Start writing your blog post content here..."></div>
+            </div>
+            
+            <!-- Editor Sidebar -->
+            <div class="editor-sidebar">
+              <!-- Featured Image -->
+              <div class="sidebar-card">
+                <h3>Featured Image</h3>
+                <div class="featured-image-upload">
+                  <div id="featured-image-preview" class="image-preview" onclick="document.getElementById('featured-image-input').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>Click to add image URL</span>
+                  </div>
+                  <input type="hidden" id="featured-image-url">
+                  <button class="btn btn-secondary btn-sm" onclick="setFeaturedImage()">
+                    <i class="fas fa-link"></i>
+                    Set Image URL
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Category -->
+              <div class="sidebar-card">
+                <h3>Category</h3>
+                <select id="post-category">
+                  <option value="">Select category</option>
+                  <option value="resume-tips">Resume Tips</option>
+                  <option value="career-advice">Career Advice</option>
+                  <option value="interview-prep">Interview Prep</option>
+                  <option value="job-search">Job Search</option>
+                </select>
+              </div>
+              
+              <!-- Read Time -->
+              <div class="sidebar-card">
+                <h3>Read Time</h3>
+                <div class="read-time-input">
+                  <input type="number" id="post-read-time" min="1" value="5">
+                  <span>min read</span>
+                </div>
+              </div>
+              
+              <!-- Featured Post -->
+              <div class="sidebar-card">
+                <h3>Featured Post</h3>
+                <label class="toggle-label">
+                  <input type="checkbox" id="post-featured">
+                  <span class="toggle-switch"></span>
+                  <span>Mark as featured</span>
+                </label>
+              </div>
+              
+              <!-- Publish Date -->
+              <div class="sidebar-card">
+                <h3>Publish Date</h3>
+                <input type="datetime-local" id="post-date">
+              </div>
+              
+              <!-- Author -->
+              <div class="sidebar-card">
+                <h3>Author</h3>
+                <input type="text" id="post-author" placeholder="Author name" value="DraftaCV Team">
+              </div>
+              
+              <!-- SEO Meta Description -->
+              <div class="sidebar-card">
+                <h3>Meta Description</h3>
+                <textarea id="post-meta" placeholder="SEO meta description..." rows="3"></textarea>
+                <span class="char-count"><span id="meta-char-count">0</span>/160</span>
+              </div>
+              
+              <!-- Tags -->
+              <div class="sidebar-card">
+                <h3>Tags</h3>
+                <input type="text" id="post-tags" placeholder="Add tags separated by commas">
+              </div>
+              
+              <!-- Delete Post (only when editing) -->
+              <div class="sidebar-card danger" id="delete-card" style="display: none;">
+                <button class="btn btn-danger" onclick="deleteCurrentPost()">
+                  <i class="fas fa-trash"></i>
+                  Delete Post
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Categories View -->
+      <section id="categories-view" class="cms-view">
+        <div class="view-header">
+          <h1>Categories</h1>
+          <p>Manage your blog categories</p>
+        </div>
+        
+        <div class="categories-grid">
+          <div class="category-card">
+            <div class="category-icon resume-tips">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <h3>Resume Tips</h3>
+            <span class="category-count" id="cat-resume-tips">0 posts</span>
+            <p>Tips for creating effective resumes</p>
+          </div>
+          <div class="category-card">
+            <div class="category-icon career-advice">
+              <i class="fas fa-briefcase"></i>
+            </div>
+            <h3>Career Advice</h3>
+            <span class="category-count" id="cat-career-advice">0 posts</span>
+            <p>General career guidance and strategies</p>
+          </div>
+          <div class="category-card">
+            <div class="category-icon interview-prep">
+              <i class="fas fa-user-tie"></i>
+            </div>
+            <h3>Interview Prep</h3>
+            <span class="category-count" id="cat-interview-prep">0 posts</span>
+            <p>Interview preparation and techniques</p>
+          </div>
+          <div class="category-card">
+            <div class="category-icon job-search">
+              <i class="fas fa-search"></i>
+            </div>
+            <h3>Job Search</h3>
+            <span class="category-count" id="cat-job-search">0 posts</span>
+            <p>Job hunting strategies and resources</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  
+  <!-- Toast Notifications -->
+  <div class="toast-container" id="toast-container"></div>
+  
+  <!-- Image URL Modal -->
+  <div class="modal" id="image-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Insert Image</h2>
+        <button class="modal-close" onclick="closeModal('image-modal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label>Image URL</label>
+        <input type="url" id="modal-image-url" placeholder="https://example.com/image.jpg">
+        <label>Alt Text (optional)</label>
+        <input type="text" id="modal-image-alt" placeholder="Describe the image">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('image-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="confirmInsertImage()">Insert Image</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Link Modal -->
+  <div class="modal" id="link-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Insert Link</h2>
+        <button class="modal-close" onclick="closeModal('link-modal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label>URL</label>
+        <input type="url" id="modal-link-url" placeholder="https://example.com">
+        <label>Link Text (optional)</label>
+        <input type="text" id="modal-link-text" placeholder="Click here">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('link-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="confirmInsertLink()">Insert Link</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Featured Image Modal -->
+  <div class="modal" id="featured-image-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Set Featured Image</h2>
+        <button class="modal-close" onclick="closeModal('featured-image-modal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label>Image URL</label>
+        <input type="url" id="modal-featured-url" placeholder="https://example.com/image.jpg">
+        <div class="image-preview-modal" id="modal-featured-preview"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('featured-image-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="confirmFeaturedImage()">Set Image</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Delete Confirmation Modal -->
+  <div class="modal" id="delete-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Delete Post</h2>
+        <button class="modal-close" onclick="closeModal('delete-modal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this post? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('delete-modal')">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmDeletePost()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="cms.js"></script>
+</body>
+</html>

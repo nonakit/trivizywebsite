@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free ATS CV Checker - DraftaCV</title>
+  <link rel="icon" type="image/png" href="images/Asset 6 (2).png">
+  <link rel="shortcut icon" type="image/png" href="images/Asset 6 (2).png">
+  <meta name="description" content="Check your CV's ATS compatibility for free. Get instant AI-powered analysis and recommendations to improve your resume.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="cv-checker.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <!-- PDF.js for PDF text extraction -->
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+          <a href="index.html#home" class="nav-logo">
+      <img src="images/Asset 6.png" href="#home" alt="DraftaCV Logo" class="logo-image">
+    </a>
+      
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="cv-checker.html" class="nav-link active">ATS Scan</a>
+        <a href="index.html#packages" class="nav-link">Packages</a>
+        <a href="index.html#features" class="nav-link">Features</a>
+        <a href="index.html#contact" class="nav-link">Contact</a>
+      </div>
+      
+      <a href="index.html#packages" class="nav-cta">Get Started Today</a>
+      
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+        <span class="hamburger"></span>
+      </button>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html" class="mobile-link">Home</a>
+      <a href="cv-checker.html" class="mobile-link">ATS Scan</a>
+      <a href="index.html#packages" class="mobile-link">Packages</a>
+      <a href="index.html#features" class="mobile-link">Features</a>
+      <a href="index.html#contact" class="mobile-link">Contact</a>
+      <a href="index.html#packages" class="mobile-cta">Get Started Today</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="checker-hero">
+    <div class="checker-hero-container">
+      <div class="checker-hero-label">
+        <span>Free ATS Analysis Tool</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+        </svg>
+      </div>
+      <h1 class="checker-hero-title">Check Your CV's ATS Compatibility</h1>
+      <p class="checker-hero-description">Upload your CV and get instant AI-powered feedback on ATS compatibility, formatting issues, and personalized recommendations to improve your chances of landing interviews.</p>
+    </div>
+  </section>
+
+  <!-- Upload Section -->
+  <section class="upload-section" id="uploadSection">
+    <div class="upload-container">
+      <div class="upload-card">
+        <div class="upload-dropzone" id="uploadDropzone">
+          <div class="upload-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <path d="M12 18v-6"/>
+              <path d="m9 15 3-3 3 3"/>
+            </svg>
+          </div>
+          <h3 class="upload-title">Drop your CV here</h3>
+          <p class="upload-subtitle">or click to browse files</p>
+          <p class="upload-formats">Supported: PDF, DOC, DOCX (Max 10MB)</p>
+          <input type="file" id="fileInput" accept=".pdf,.doc,.docx" hidden />
+        </div>
+        
+        <!-- File Preview -->
+        <div class="file-preview" id="filePreview" style="display: none;">
+          <div class="file-preview-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </div>
+          <div class="file-preview-info">
+            <span class="file-preview-name" id="fileName">document.pdf</span>
+            <span class="file-preview-size" id="fileSize">2.4 MB</span>
+          </div>
+          <button type="button" class="file-preview-remove" id="fileRemove" aria-label="Remove file">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Analyze Button -->
+        <button type="button" class="analyze-btn" id="analyzeBtn" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+          </svg>
+          <span>Analyze My CV</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loading Section -->
+<section class="loading-section" id="loadingSection" style="display: none;">
+  <div class="loading-container">
+    <div class="loading-card">
+      <div class="loading-spinner"></div>
+      <h3 class="loading-title">Analyzing Your CV</h3>
+      <p class="loading-subtitle" id="loadingStatus">Extracting text from document...</p>
+      <div class="loading-progress">
+        <div class="loading-progress-bar" id="loadingProgressBar"></div>
+      </div>
+      <div class="loading-steps">
+        <div class="loading-step active" id="step1">
+          <span class="step-icon"><i class="fas fa-file-alt"></i></span>
+          <span class="step-text">Extracting text</span>
+        </div>
+        <div class="loading-step" id="step2">
+          <span class="step-icon"><i class="fas fa-search"></i></span>
+          <span class="step-text">Analyzing format</span>
+        </div>
+        <div class="loading-step" id="step3">
+          <span class="step-icon"><i class="fas fa-microchip"></i></span>
+          <span class="step-text">AI evaluation</span>
+        </div>
+        <div class="loading-step" id="step4">
+          <span class="step-icon"><i class="fas fa-chart-bar"></i></span>
+          <span class="step-text">Generating report</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- Results Section -->
+  <section class="results-section" id="resultsSection" style="display: none;">
+    <div class="results-container">
+      <!-- Score Card -->
+      <div class="score-card">
+        <div class="score-header">
+          <h2>Your ATS Compatibility Score</h2>
+          <button type="button" class="score-recheck" id="recheckBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+              <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+              <path d="M21 3v5h-5"/>
+              <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+              <path d="M8 16H3v5"/>
+            </svg>
+            Check Another CV
+          </button>
+        </div>
+        <div class="score-display">
+          <div class="score-circle" id="scoreCircle">
+            <svg viewBox="0 0 100 100">
+              <circle class="score-bg" cx="50" cy="50" r="45"/>
+              <circle class="score-progress" cx="50" cy="50" r="45" id="scoreProgress"/>
+            </svg>
+            <div class="score-value">
+              <span class="score-number" id="scoreNumber">0</span>
+              <span class="score-label">/ 100</span>
+            </div>
+          </div>
+          <div class="score-status" id="scoreStatus">
+            <span class="status-badge" id="statusBadge">Analyzing...</span>
+            <p class="status-text" id="statusText">Your CV is being analyzed...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis Grid -->
+      <div class="analysis-grid">
+        <!-- Issues Found -->
+        <div class="analysis-card issues-card">
+          <div class="analysis-card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <h3>Issues Found</h3>
+            <span class="issue-count" id="issueCount">0</span>
+          </div>
+          <ul class="issues-list" id="issuesList">
+            <!-- Issues will be populated here -->
+          </ul>
+        </div>
+
+        <!-- Improvements -->
+        <div class="analysis-card improvements-card">
+          <div class="analysis-card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+            <h3>Recommendations</h3>
+          </div>
+          <ul class="improvements-list" id="improvementsList">
+            <!-- Improvements will be populated here -->
+          </ul>
+        </div>
+
+        <!-- Format Analysis -->
+        <div class="analysis-card format-card">
+          <div class="analysis-card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+            </svg>
+            <h3>Format Check</h3>
+          </div>
+          <div class="format-checks" id="formatChecks">
+            <!-- Format checks will be populated here -->
+          </div>
+        </div>
+
+        <!-- Keywords Analysis -->
+        <div class="analysis-card keywords-card">
+          <div class="analysis-card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <h3>Detected Sections</h3>
+          </div>
+          <div class="keywords-tags" id="keywordsTags">
+            <!-- Keywords will be populated here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Package Recommendation -->
+      <div class="recommendation-card" id="recommendationCard">
+        <div class="recommendation-header">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+            <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.648a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/>
+          </svg>
+          <h2>Our Recommendation</h2>
+        </div>
+        <div class="recommendation-content">
+          <div class="recommendation-package" id="recommendationPackage">
+            <span class="package-label">Recommended Package</span>
+            <span class="package-name" id="packageName">Professional</span>
+            <span class="package-price" id="packagePrice">৳1,999</span>
+          </div>
+          <p class="recommendation-reason" id="recommendationReason">
+            Based on your CV analysis, we recommend our Professional package to address formatting issues and optimize your resume for ATS systems.
+          </p>
+          <a href="index.html#packages" class="recommendation-cta" id="recommendationCta">
+            View Package Details
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Summary Card -->
+      <div class="summary-card">
+        <h3>Analysis Summary</h3>
+        <p class="summary-text" id="summaryText">
+          Your CV analysis is complete. Review the detailed breakdown above and consider our recommendations to improve your chances of passing ATS screening.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="how-it-works-section">
+    <div class="how-it-works-container">
+      <h2 class="how-it-works-title">How Our ATS Checker Works</h2>
+      <p class="how-it-works-subtitle">Our AI analyzes your CV against industry-standard ATS requirements</p>
+      
+      <div class="how-it-works-grid">
+        <div class="how-it-works-card">
+          <div class="how-it-works-number">01</div>
+          <h3>Upload Your CV</h3>
+          <p>Simply drag and drop your CV or browse to upload. We support PDF, DOC, and DOCX formats.</p>
+        </div>
+        <div class="how-it-works-card">
+          <div class="how-it-works-number">02</div>
+          <h3>AI Analysis</h3>
+          <p>Our AI powered by Google Gemini analyzes formatting, structure, keywords, and ATS compatibility.</p>
+        </div>
+        <div class="how-it-works-card">
+          <div class="how-it-works-number">03</div>
+          <h3>Get Your Score</h3>
+          <p>Receive a detailed compatibility score with specific issues and actionable improvements.</p>
+        </div>
+        <div class="how-it-works-card">
+          <div class="how-it-works-number">04</div>
+          <h3>Improve & Succeed</h3>
+          <p>Use our recommendations or professional services to create an ATS-optimized resume.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="checker-cta-section">
+    <div class="checker-cta-container">
+      <h2>Need Professional Help?</h2>
+      <p>Let our expert team craft a perfectly optimized CV that passes any ATS and impresses hiring managers.</p>
+      <a href="index.html#packages" class="checker-cta-btn">View Our Packages</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3 class="footer-logo">DraftaCV</h3>
+          <p class="footer-tagline">Handcrafted Resumes That Guard Your Future</p>
+          <div class="footer-contact-info">
+            <p>Email: draftacv@gmail.com</p>
+            <p>Phone: (+62) 8112087181</p>
+          </div>
+          <div class="footer-social">
+            <a href="https://wa.me/628112087181" target="_blank" class="social-link whatsapp" aria-label="WhatsApp">
+              <svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </a>
+            <a href="https://www.instagram.com/draftacv" target="_blank" class="social-link instagram" aria-label="Instagram">
+              <svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </a>
+            <a href="mailto:draftacv@gmail.com" class="social-link email" aria-label="Email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <rect width="20" height="16" x="2" y="4" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        
+        <div class="footer-links-col">
+          <h4 class="footer-links-title">Services</h4>
+          <ul class="footer-links">
+            <li><a href="index.html#packages">Resume Writing</a></li>
+            <li><a href="index.html#packages">CV Design</a></li>
+            <li><a href="cv-checker.html">ATS Checker</a></li>
+            <li><a href="index.html#packages">LinkedIn Optimization</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-links-col">
+          <h4 class="footer-links-title">Packages</h4>
+          <ul class="footer-links">
+            <li><a href="index.html#packages">Basic Starter</a></li>
+            <li><a href="index.html#packages">Professional</a></li>
+            <li><a href="index.html#packages">Executive Elite</a></li>
+            <li><a href="index.html#contact">Custom Solutions</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-links-col">
+          <h4 class="footer-links-title">Resources</h4>
+          <ul class="footer-links">
+            <li><a href="cv-checker.html">Free ATS Checker</a></li>
+            <li><a href="index.html#samples">Sample Resumes</a></li>
+            <li><a href="index.html#faq">FAQ</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+          <p class="copyright">© <span id="year"></span> DraftaCV. All rights reserved. | Handcrafted Resumes That Guard Your Future</p>
+          <script>
+          document.getElementById('year').textContent = new Date().getFullYear();
+          </script>        
+          <div class="footer-legal">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-of-service.html">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="cv-checker.js"></script>
+</body>
+</html>
